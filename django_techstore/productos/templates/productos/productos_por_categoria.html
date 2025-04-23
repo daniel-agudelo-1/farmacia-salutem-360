@@ -1,0 +1,24 @@
+{% load static %}
+{% include 'productos/menu.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Productos en la categoría: {{ categoria.nombre }}</h2>
+    <div class="row">
+        {% for producto in productos %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">${{ producto.precio|floatformat:0 }}</p>
+                        <a href="{% url 'agregar_al_carrito' producto.id %}" class="btn btn-primary">Añadir al carrito</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay productos en esta categoría.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

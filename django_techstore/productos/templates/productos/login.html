@@ -1,0 +1,94 @@
+{% load static %}
+{% include 'productos/menu.html' %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #3498db);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-container {
+        max-width: 400px;
+        margin: 60px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .form-container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-container button:hover {
+        background-color: #1abc9c;
+    }
+
+    .form-container p {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .form-container a {
+        color: #2980b9;
+        text-decoration: none;
+    }
+
+    .form-container a:hover {
+        text-decoration: underline;
+    }
+
+    .alert {
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: #dff0d8;
+        color: #3c763d;
+    }
+
+    .alert-error {
+        background-color: #f2dede;
+        color: #a94442;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Iniciar Sesión</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p>
+    <p>¿No tienes una cuenta? <a href="{% url 'registro' %}">Regístrate</a></p>
+</div>
+
+{% include 'productos/footer.html' %}

@@ -1,0 +1,118 @@
+{% load static %}
+{% load humanize %}
+
+{% include 'productos/menu.html' %}
+
+<style>
+    .carrito-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .carrito-contenido {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        min-width: 320px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+        padding: 15px;
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    .carrito-dropdown:hover .carrito-contenido {
+        display: block;
+    }
+
+    .carrito-item {
+        border-bottom: 1px solid #ddd;
+        padding: 8px 0;
+    }
+
+    .carrito-item:last-child {
+        border-bottom: none;
+    }
+
+    .carrito-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">🛒 Carrito de Compras</h2>
+
+    {% if carrito %}
+    <div class="text-end mb-4 carrito-dropdown me-4">
+        <button class="btn btn-outline-dark">
+            Vista previa del carrito
+        </button>
+        <div class="carrito-contenido">
+            {% for id, item in carrito.items %}
+            <div class="carrito-item d-flex align-items-center">
+                <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+                <div>
+                    <strong>{{ item.nombre }}</strong><br>
+                    ${{ item.precio|floatformat:0|intcomma }} x {{ item.cantidad }}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-end mt-2">
+                <strong>Total: ${{ total|floatformat:0|intcomma }}</strong><br>
+                <a href="{% url 'ver_carrito' %}" class="btn btn-sm btn-dark mt-2">Ir al carrito</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, item in carrito.items %}
+            <tr class="align-middle text-center">
+                <td>{{ item.nombre }}</td>
+                <td>${{ item.precio|floatformat:0|intcomma }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>${{ item.subtotal|floatformat:0|intcomma }}</td>
+
+                <td>
+                    <a href="{% url 'eliminar_del_carrito' id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'index' %}" class="btn btn-secondary">← Seguir comprando</a>
+        <a href="{% url 'vaciar_carrito' %}" class="btn btn-outline-danger">Vaciar carrito</a>
+    </div>
+
+    <h4 style="margin-top: 20px;">Total a pagar: <strong>${{ total|floatformat:0|intcomma }}</strong></h4>
+    {% else %}
+    <p class="text-center fs-4">El carrito está vacío.</p>
+    {% endif %}
+</div>
+
+<div class="text-center mt-4">
+    <form method="post" action="{% url 'finalizar_compra' %}">
+      {% csrf_token %}
+      <button class="btn btn-success btn-lg px-5 py-2 rounded-pill shadow">
+        🧾 Finalizar Compra
+      </button>
+    </form>
+  </div>
+  
+
+{% include 'productos/footer.html' %}

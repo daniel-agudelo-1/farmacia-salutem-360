@@ -1,0 +1,74 @@
+{% load humanize %}
+{% include 'productos/menu.html' %}
+
+<style>
+  .invoice-card { border: none; border-radius: 1rem; overflow: hidden; }
+  .invoice-header {
+    background: linear-gradient(135deg, #0062E6 0%, #33AEFF 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+  .invoice-header h1 { font-size: 2.5rem; margin-bottom: .5rem; }
+  .invoice-header p { font-size: 1.1rem; margin: 0; }
+  .invoice-body { padding: 2rem; }
+  .invoice-body .lead { font-size: 1.25rem; margin-bottom: 1.5rem; }
+  .invoice-table th {
+    background-color: #f0f0f0;
+    border: none;
+    text-align: center;
+  }
+  .invoice-table td { vertical-align: middle; text-align: center; }
+  .invoice-footer {
+    background-color: #f8f9fa;
+    padding: 1rem 2rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    text-align: right;
+  }
+</style>
+
+<div class="container my-5">
+  <div class="card invoice-card shadow-lg">
+    <div class="invoice-header">
+      <h1>Salutem360</h1>
+      <p class="mb-1">Factura #{{ factura.numero }}</p>
+      <small>Fecha: {{ factura.fecha|date:"d/m/Y H:i:s" }}</small>
+    </div>
+    <div class="invoice-body">
+      <p class="lead text-center text-secondary">
+        ¡Gracias por tu compra! En <strong>Salutem360</strong> estamos comprometidos con tu salud.
+      </p>
+      <div class="table-responsive">
+        <table class="table invoice-table mb-0">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in detalles %}
+            <tr>
+              <td>{{ item.producto.nombre }}</td>
+              <td>{{ item.cantidad }}</td>
+              <td>${{ item.subtotal|intcomma }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="invoice-footer">
+      <h3 class="mb-0">Total a Pagar: <span class="text-success">${{ factura.total|intcomma }}</span></h3>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <a href="{% url 'index' %}" class="btn btn-primary btn-lg px-4 py-2 rounded-pill">
+      ← Volver a la tienda
+    </a>
+  </div>
+</div>
+
+{% include 'productos/footer.html' %}

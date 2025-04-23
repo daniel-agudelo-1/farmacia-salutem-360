@@ -1,0 +1,87 @@
+{% load static %}
+{% load humanize %}
+
+{% include 'productos/menu.html' %}
+
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Tu salud es nuestra prioridad</h1>
+            <p class="lead mb-5">Encuentra los mejores productos farmacéuticos con entrega rápida y servicio profesional.</p>
+            <a href="#productos" class="btn btn-primary btn-lg me-2">Ver productos</a>
+            <a href="#ofertas" class="btn btn-outline-light btn-lg">Ofertas especiales</a>
+        </div>
+    </section>
+
+   <!-- Contenido principal -->
+    <div class="container mb-5">
+        <!-- Categorías -->
+        <div class="contenedor-categorias">
+            {% for categoria in categorias %}
+              <a href="{% url 'productos_por_categoria' categoria.id %}" class="categoria-card">
+                {{ categoria.nombre }}
+              </a>
+            {% endfor %}
+          </div>
+          
+
+        <!-- Productos en oferta -->
+
+        <div class="row mb-5">
+            <h2 id="ofertas" class="mb-4">Productos en Oferta</h2>
+            {% for producto in productos_oferta %}
+            <div class="col-md-4">
+                <div class="card h-100 position-relative">
+                    <a href="{% url 'detalle_producto' producto.id %}">  
+                    {% if producto.en_oferta %}
+                    <span class="badge badge-offer">Oferta</span>
+                    {% endif %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="price">${{ producto.precio_oferta|floatformat:0|intcomma }}</span>
+                                {% if producto.en_oferta %}
+                                <span class="old-price ms-2">${{ producto.precio|floatformat:0|intcomma }}</span>
+                                {% endif %}
+                                <!--boton para añadir al carrito -->
+                            </div>
+                            <a href="{% url 'agregar_al_carrito' producto.id %}" class="btn btn-sm btn-primary">Añadir </a>
+                              
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Todos los productos -->
+        
+        <div class="row">
+            <h2 id="productos" class="mb-4">Todos los Productos</h2>
+            {% for producto in productos %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'detalle_producto' producto.id %}">  
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                    </a>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <p class="text-muted"><small>{{ producto.categoria }}</small></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price">${{ producto.precio|floatformat:0|intcomma }}</span>
+                            <a href="{% url 'agregar_al_carrito' producto.id %}" class="btn btn-sm btn-primary">Añadir</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% include 'productos/footer.html' %}

@@ -1,0 +1,20 @@
+{% load static %}
+{% load humanize %}
+{% include 'productos/menu.html' %}
+
+<div class="detalle-producto-box">
+  <h2 class="producto-nombre">{{ producto.nombre }}</h2>
+
+  <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="detalle-imagen">
+
+  <p class="detalle-descripcion">{{ producto.descripcion }}</p>
+
+  <p class="detalle-precio">Precio: ${{ producto.precio|floatformat:0|intcomma }}</p>
+
+  <!-- Mostrar categoría del producto -->
+  <p class="detalle-categoria">Categoría: {{ producto.categoria.nombre }}</p>
+
+  <a href="{% url 'agregar_al_carrito' producto.id %}" class="btn-agregar-lindo">🛒 Añadir al carrito</a>
+</div>
+
+{% include 'productos/footer.html' %}

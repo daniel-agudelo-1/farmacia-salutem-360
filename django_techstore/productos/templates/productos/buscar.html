@@ -1,0 +1,29 @@
+{% load static %}
+{% include 'productos/menu.html' %}
+
+<div class="container mt-4">
+<h2>Resultados de búsqueda para "{{ query }}"</h2>
+
+<div class="row">
+    {% if productos %}
+        {% for producto in productos %}
+        <div class="col-md-4">
+            <div class="card">
+                <a href="{% url 'detalle_producto' producto.id %}">
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text">{{ producto.descripcion }}</p>
+                    <p><strong>Precio: </strong>${{ producto.precio }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+    {% endif %}
+</div>
+</div>
+
+{% include 'productos/footer.html' %}
